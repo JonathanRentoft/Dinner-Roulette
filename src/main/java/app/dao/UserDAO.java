@@ -12,6 +12,9 @@ public class UserDAO {
     private static EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory();
     private static UserDAO instance;
 
+    // privat konstruktør for at undgå instansiering udefra
+    private UserDAO() {}
+
     public static UserDAO getInstance() {
         if (instance == null) {
             instance = new UserDAO();
@@ -19,31 +22,24 @@ public class UserDAO {
         return instance;
     }
 
-    //SOC - her slår vi op i databasen efter en verified user.
-    public User getVerifiedUser(String username, String password) {
-        try (EntityManager em = emf.createEntityManager()) {
-            //Find user by username
-            User user = findByUsername(username);
-
-            //If user exists, check if the provided password matches the hashed password
-            if (user != null && BCrypt.checkpw(password, user.getPassword())) {
-                return user; // Passwords match
-            }
-        } catch (Exception e) {
-            // Handle exceptions
-        }
-        return null; // User not found or password incorrect
+    // Metode til at injecte en test-EMF
+    public void setEmf(EntityManagerFactory emf) {
+        UserDAO.emf = emf;
     }
 
-    public User createUser(String username, String password) {
-        User user = new User();
-        user.setUsername(username);
+    public User getVerifiedUser(String username, String password) {
+        try (EntityManager em = emf.createEntityManager()) {
+            User user = em.find(User.class, username);
+            if (user != null && BCrypt.checkpw(password, user.getPassword())) {
+                return user;
+            }
+        }
+        return null;
+    }
 
-        // Hashing the password before saving it to the database
+    public User createUser(String username, String password, String role) {
         String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
-        user.setPassword(hashedPassword);
-        user.setRole("USER"); // Alle nye brugere får rollen USER
-
+        User user = new User(username, hashedPassword, role);
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
             em.persist(user);

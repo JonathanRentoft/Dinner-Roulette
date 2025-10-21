@@ -10,28 +10,18 @@ import java.util.Set;
 
 @Entity
 @Table(name = "users") // God praksis at bruge @Table for at undgå navnekonflikt med SQL's "USER"
-@NoArgsConstructor
 @Getter
 @Setter
+@NoArgsConstructor // Lombok-konstruktør uden argumenter (krævet af JPA)
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-
-    @Column(unique = true, nullable = false)
     private String username;
 
     private String password;
-
     private String role;
 
-
-    // En-til-mange relation til FavoriteRecipe.
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<FavoriteRecipe> favoriteRecipes = new HashSet<>();
-
-    // Mange-til-mange relation til Ingredient.
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_ingredient",
@@ -40,10 +30,29 @@ public class User {
     )
     private Set<Ingredient> ingredients = new HashSet<>();
 
-    public void addIngredient(Ingredient managedIngredient) {
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<FavoriteRecipe> favoriteRecipes = new HashSet<>();
+
+    // NY KONSTRUKTØR - Denne løser din fejl
+    public User(String username, String password, String role) {
+        this.username = username;
+        this.password = password;
+        this.role = role;
     }
 
-    public void removeIngredient(Ingredient managedIngredient) {
+    public void addIngredient(Ingredient ingredient) {
+        ingredients.add(ingredient);
+        ingredient.getUsers().add(this);
+    }
+
+    public void removeIngredient(Ingredient ingredient) {
+        ingredients.remove(ingredient);
+        ingredient.getUsers().remove(this);
+    }
+
+    public Object getId() {
+        return username;
     }
 }
 

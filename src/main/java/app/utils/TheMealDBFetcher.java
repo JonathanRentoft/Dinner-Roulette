@@ -32,4 +32,23 @@ public class TheMealDBFetcher {
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         return response.body();
     }
+
+    public String fetchRecipesByIngredient(String firstIngredient) throws IOException, InterruptedException {
+        String url = BASE_URL + "recipes.php?i=" + firstIngredient;
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                        .build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        return response.body();
+    }
+
+
+    public String fetchRecipeDetailsById(int recipeId) throws IOException, InterruptedException {
+        String url = BASE_URL + "details.php?i=" + recipeId;
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                .build();
+        HttpResponse<String> response =client.send(request, HttpResponse.BodyHandlers.ofString());
+        return response.body();
+    }
 }

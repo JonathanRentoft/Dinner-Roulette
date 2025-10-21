@@ -63,5 +63,10 @@ public class FavoriteRecipeDAO {
             return em.find(FavoriteRecipe.class, id);
         }
     }
+
+    //Til test
+    public void setEmf(EntityManagerFactory emf) {
+        this.emf = emf;
+    }
 }
 

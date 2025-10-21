@@ -1,0 +1,112 @@
+### Dinner Roulette API Test Requests
+### Brug 'Run all requests in file' i IntelliJ for at køre dem sekventielt.
+
+# Variabler - Skift port hvis din applikation kører på en anden.
+@baseUrl = http://localhost:7070
+@token =
+
+### 1. Registrer en ny bruger
+# @name register
+POST {{baseUrl}}/api/auth/register
+Content-Type: application/json
+
+{
+  "username": "testuser",
+  "password": "password123"
+}
+
+> {%
+    client.global.set("token", response.body.token);
+%}
+
+### 2. Login med den nye bruger for at få en frisk token
+# @name login
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "testuser",
+  "password": "password123"
+}
+
+> {%
+    client.global.set("token", response.body.token);
+%}
+
+### -------------------------------------------
+### INGREDIENT ENDPOINTS (Kræver token)
+### -------------------------------------------
+
+### 3. Tilføj en ingrediens til brugerens køleskab
+POST {{baseUrl}}/api/me/ingredients
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "chicken"
+}
+
+### 4. Tilføj endnu en ingrediens
+POST {{baseUrl}}/api/me/ingredients
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "rice"
+}
+
+
+### 5. Hent brugerens liste af ingredienser
+GET {{baseUrl}}/api/me/ingredients
+Authorization: Bearer {{token}}
+
+### 6. Slet en ingrediens fra listen (NOTE: du skal måske ændre ID'et til 1, 2, etc.)
+DELETE {{baseUrl}}/api/me/ingredients/2
+Authorization: Bearer {{token}}
+
+
+### -------------------------------------------
+### RECIPE ENDPOINTS (Kræver token)
+### -------------------------------------------
+
+### 7. Find opskrifter baseret på brugerens ingredienser
+# Denne vil nu bruge "chicken" da vi slettede "rice"
+GET {{baseUrl}}/api/recipes/find
+Authorization: Bearer {{token}}
+
+
+### 8. Hent detaljer for en specifik opskrift (ID fra TheMealDB)
+# Eksempel ID for "Chicken Arrabiata"
+GET {{baseUrl}}/api/recipes/52771
+Authorization: Bearer {{token}}
+
+
+### -------------------------------------------
+### FAVORITE RECIPE ENDPOINTS (Kræver token)
+### -------------------------------------------
+
+### 9. Tilføj en opskrift til favoritter
+POST {{baseUrl}}/api/me/favorites
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "externalRecipeId": "52771",
+  "recipeName": "Chicken Arrabiata"
+}
+
+### 10. Hent brugerens favoritliste
+GET {{baseUrl}}/api/me/favorites
+Authorization: Bearer {{token}}
+
+### 11. Slet en favorit (NOTE: du skal måske ændre ID'et til 1)
+DELETE {{baseUrl}}/api/me/favorites/1
+Authorization: Bearer {{token}}
+
+
+### -------------------------------------------
+### FEJL-TESTS
+### -------------------------------------------
+
+### 12. Forsøg at hente ingredienser UDEN token (skal fejle med 401 Unauthorized)
+GET {{baseUrl}}/api/me/ingredients

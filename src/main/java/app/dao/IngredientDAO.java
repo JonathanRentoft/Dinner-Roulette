@@ -61,5 +61,9 @@ public class IngredientDAO {
             return em.find(Ingredient.class, id);
         }
     }
+
+    public void setEmf(EntityManagerFactory emf) {
+        this.emf = emf;
+    }
 }
 
