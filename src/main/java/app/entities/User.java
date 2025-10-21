@@ -40,5 +40,10 @@ public class User {
     )
     private Set<Ingredient> ingredients = new HashSet<>();
 
+    public void addIngredient(Ingredient managedIngredient) {
+    }
+
+    public void removeIngredient(Ingredient managedIngredient) {
+    }
 }
 
