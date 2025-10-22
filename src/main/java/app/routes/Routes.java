@@ -8,24 +8,20 @@ import static io.javalin.apibuilder.ApiBuilder.*;
 public class Routes {
 
     public static EndpointGroup getRoutes() {
-
         return () -> {
-            // API routes
-            path("/api", () -> {
-                // Auth routes
-                path("/auth", () -> {
-                    post("/login", AuthController.login());
-                    post("/register", AuthController.register());
-                });
-
-                // TODO: Add other controllers and endpoints here later
-                // Example:
-                // path("/me", () -> {
-                //     before(SecurityController.authenticate()); // Secure all /me endpoints
-                //     get("/ingredients", UserController.getIngredients());
-                //     post("/ingredients", UserController.addIngredient());
-                // });
+            // Auth routes
+            path("/auth", () -> {
+                post("/login", AuthController.login());
+                post("/register", AuthController.register());
             });
+
+            // TODO: Add other controllers and endpoints here later
+            // Example:
+            // path("/me", () -> {
+            //     before(SecurityController.authenticate()); // Secure all /me endpoints
+            //     get("/ingredients", UserController.getIngredients());
+            //     post("/ingredients", UserController.addIngredient());
+            // });
         };
     }
 }
