@@ -28,7 +28,7 @@ class IngredientDAOTest {
         ingredientDAO.setEmf(emf); // Vigtigt: Sæt også EMF for denne DAO
 
         // Kør populator for at have ingredienser at teste med
-        Populator.populateDatabase();
+        Populator.populateDatabase(emf);
     }
 
     @AfterAll

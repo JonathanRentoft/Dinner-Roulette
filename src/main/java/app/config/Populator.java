@@ -6,8 +6,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 
 public class Populator {
-    public static void populateDatabase() {
-        EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory();
+    public static void populateDatabase(EntityManagerFactory emf) {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
 

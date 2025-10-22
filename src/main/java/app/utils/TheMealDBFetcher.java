@@ -34,21 +34,20 @@ public class TheMealDBFetcher {
     }
 
     public String fetchRecipesByIngredient(String firstIngredient) throws IOException, InterruptedException {
-        String url = BASE_URL + "recipes.php?i=" + firstIngredient;
+        String url = BASE_URL + "filter.php?i=" + firstIngredient;
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
-                        .build();
+                .build();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         return response.body();
     }
 
-
     public String fetchRecipeDetailsById(int recipeId) throws IOException, InterruptedException {
-        String url = BASE_URL + "details.php?i=" + recipeId;
+        String url = BASE_URL + "lookup.php?i=" + recipeId;
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
                 .build();
-        HttpResponse<String> response =client.send(request, HttpResponse.BodyHandlers.ofString());
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         return response.body();
     }
 }

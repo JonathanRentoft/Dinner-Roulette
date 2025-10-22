@@ -44,8 +44,8 @@ class FavoriteRecipeDAOTest {
 
         // Opret en favorit
         FavoriteRecipe createdFavorite = favoriteRecipeDAO.create("52772", "Spaghetti Bolognese", testUser);
-        assertNotNull(createdFavorite);
-        assertThat(createdFavorite.getId(), is(1)); // Antager at det er den første i test-databasen
+        assertNotNull(createdFavorite.getId());
+        assertTrue(createdFavorite.getId() > 0);
 
         // Hent alle favoritter for brugeren
         List<FavoriteRecipe> favorites = favoriteRecipeDAO.getAllForUser(testUser);

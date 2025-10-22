@@ -63,7 +63,7 @@ public class IngredientDAO {
     }
 
     public void setEmf(EntityManagerFactory emf) {
-        this.emf = emf;
+        IngredientDAO.emf = emf;
     }
 }
 

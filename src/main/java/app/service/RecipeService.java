@@ -40,7 +40,7 @@ public class RecipeService {
 
     public void removeFavorite(User user, int favoriteId) throws ApiException {
         FavoriteRecipe favorite = favoriteRecipeDAO.findById(favoriteId);
-        if (favorite == null || favorite.getUser().getId() != user.getId()) {
+        if (favorite == null || !favorite.getUser().getId().equals(user.getId())) {
             throw new ApiException(404, "Favorite recipe not found or does not belong to user.");
         }
         favoriteRecipeDAO.delete(favoriteId);

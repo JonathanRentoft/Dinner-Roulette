@@ -1,5 +1,6 @@
 package app.utils;
 
+import app.dto.UserDTO;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -25,7 +26,7 @@ public class TokenUtils {
     private static final Algorithm ALGORITHM = Algorithm.HMAC256(SECRET_KEY);
     private static final int TOKEN_EXPIRE_TIME = 1000 * 60 * 60; // 1 time (i millisekunder)
 
-    public static String createToken(User user) {
+    public static String createToken(UserDTO user) {
         try {
             return JWT.create()
                     .withIssuer(ISSUER)
@@ -36,7 +37,6 @@ public class TokenUtils {
                     .withExpiresAt(new Date(System.currentTimeMillis() + TOKEN_EXPIRE_TIME))
                     .sign(ALGORITHM);
         } catch (JWTCreationException exception){
-            // Log fejlen til debug
             exception.printStackTrace();
             throw new RuntimeException("Error creating token", exception);
         }

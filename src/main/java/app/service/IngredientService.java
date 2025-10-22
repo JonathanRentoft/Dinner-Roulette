@@ -21,8 +21,6 @@ public class IngredientService {
             throw new ApiException(404, "Ingredient not found: " + ingredientName);
         }
         ingredientDAO.addIngredientToUser(user, ingredient);
-        // Return a fresh user object with the updated ingredient list
-        user.addIngredient(ingredient);
         return user;
     }
 

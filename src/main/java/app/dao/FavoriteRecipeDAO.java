@@ -66,7 +66,7 @@ public class FavoriteRecipeDAO {
 
     //Til test
     public void setEmf(EntityManagerFactory emf) {
-        this.emf = emf;
+        FavoriteRecipeDAO.emf = emf;
     }
 }
 
