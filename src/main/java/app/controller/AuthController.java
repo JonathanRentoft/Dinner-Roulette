@@ -43,7 +43,7 @@ public class AuthController {
             ObjectNode returnNode = objectMapper.createObjectNode();
             try {
                 UserDTO userInput = ctx.bodyAsClass(UserDTO.class);
-                User createdUser = userDAO.createUser(userInput.getUsername(), userInput.getPassword());
+                User createdUser = userDAO.createUser(userInput.getUsername(), userInput.getPassword(), "USER");
 
                 String token = "DUMMY_TOKEN_REPLACE_ME"; // Placeholder for token
                 ctx.status(HttpStatus.CREATED).json(new TokenDTO(token, userInput.getUsername()));
