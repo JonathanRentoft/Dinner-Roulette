@@ -1,0 +1,93 @@
+PRD: Dinner Roulette
+Team: Jonathan Rentoft Larsen
+1. Vision & Purpose
+Vision
+To create a fun and spontaneous solution to the daily "what's for dinner?" problem, turning the contents of a user's fridge into an exciting game of chance that results in a delicious meal.
+Purpose
+Dinner Roulette is a backend API designed to combat decision fatigue and reduce food waste. Users maintain a digital inventory of ingredients they have on hand ("My Fridge"). The API provides two primary functions: a comprehensive search for all possible meals based on the user's ingredients, and a "roulette" for a single, random suggestion. The service also allows users to save their favorite discoveries for later.
+2. Users & Roles
+The API will be secured with JWT and will support two distinct roles:
+USER: The standard user. A USER can manage their own ingredient list and personal list of favorite recipes.
+ADMIN: A system administrator. An ADMIN has oversight of the entire system for maintenance and support.
+3. Datamodel & Entities
+The database will be structured around four core entities.
+User: Stores user credentials and roles.
+Ingredient: A master table of all unique ingredients known to the system.
+UserIngredient: A join table representing the user's fridge, connecting a User to an Ingredient.
+FavoriteRecipe: A "bookmark" table storing a user's saved recipes, containing a reference to the recipe's external ID from TheMealDB.
+Entity-Relationship Diagram (ERD)
+4. External API Dependency
+Service: TheMealDB API (v1)
+Base URL: https://www.themealdb.com/api/json/v1/1/
+Key Endpoints:
+filter.php?i={ingredient}: To find meals by a single ingredient.
+lookup.php?i={meal_id}: To get full details for a specific meal.
+5. Endpoint Definitions
+5.1 Authentication (Public)
+Method
+Endpoint
+Description
+POST
+/auth/login
+Authenticates a user and returns a JWT.
+POST
+/auth/register
+Creates a new user with the USER role.
+
+5.2 My Fridge (User's Ingredients)
+Method
+Endpoint
+Description
+GET
+/me/ingredients
+Fetches the current user's list of ingredients.
+POST
+/me/ingredients
+Adds an ingredient to the user's fridge.
+DELETE
+/me/ingredients/{id}
+Removes an ingredient from the user's fridge.
+
+5.3 Recipe Discovery
+Method
+Endpoint
+Description
+GET
+/recipes/all-possible
+NEW! Fetches all recipes based on all ingredients in the user's fridge by making multiple calls to TheMealDB and combining the results.
+GET
+/recipes/roulette
+Randomly picks one ingredient from the user's fridge and returns recipe suggestions for it.
+GET
+/recipes/{id}
+NEW! Fetches the full, detailed recipe information for a single meal by its ID from TheMealDB.
+
+5.4 Favorite Recipes
+Method
+Endpoint
+Description
+GET
+/me/favorites
+Fetches all of the current user's saved favorite recipes.
+POST
+/me/favorites
+Saves a recipe to the user's favorites list.
+DELETE
+/me/favorites/{id}
+Removes a favorite recipe from the user's list.
+
+5.5 Administration Endpoints
+Method
+Endpoint
+Description
+GET
+/admin/users
+Fetches a list of all users in the system.
+GET
+/admin/stats/popular-ingredients
+Returns a list of the most popular ingredients.
+DELETE
+/admin/users/{username}
+Deletes a user and all their associated data.
+
+
